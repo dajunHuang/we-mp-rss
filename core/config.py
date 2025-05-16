@@ -26,5 +26,5 @@ DEBUG=get("debug",False)
 APP_NAME=get("app_name","we-mp-rss")
 
 
-VERSION='1.0.0'
+VERSION='1.2.0'
 print(VERSION)
