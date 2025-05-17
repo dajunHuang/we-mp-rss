@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 # 创建API路由分组
-api_router = APIRouter(prefix="/api")
+api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(auth_router, prefix="/wx")
 api_router.include_router(user_router, prefix="/wx")
 api_router.include_router(article_router, prefix="/wx")

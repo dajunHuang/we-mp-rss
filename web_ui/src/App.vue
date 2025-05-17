@@ -5,7 +5,7 @@
       <div class="header-left">
         <div class="logo">
           <icon-rss />
-          <span>订阅助手</span>
+          <span>{{appTitle}}</span>
         </div>
       </div>
       <div class="header-right">
@@ -92,6 +92,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import { getCurrentUser } from '@/api/auth'
 import { logout } from '@/api/auth'
+const appTitle = computed(() => import.meta.env.VITE_APP_TITLE || '微信公众号订阅助手')
 
 const router = useRouter()
 const route = useRoute()

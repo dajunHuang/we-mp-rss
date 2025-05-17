@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from core.auth import get_current_user
 from core.db import DB
-from .ver import API_VERSION
-router = APIRouter(prefix=f"{API_VERSION}/mps", tags=["公众号管理"])
+router = APIRouter(prefix=f"/mps", tags=["公众号管理"])
 
 @router.get("", summary="获取公众号列表")
 async def get_mps(current_user: dict = Depends(get_current_user)):

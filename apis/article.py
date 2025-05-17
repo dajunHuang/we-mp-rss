@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from core.auth import get_current_user
 from core.db import DB
-from .ver import API_VERSION
 
-router = APIRouter(prefix=f"{API_VERSION}/articles", tags=["文章管理"])
+router = APIRouter(prefix=f"/articles", tags=["文章管理"])
 @router.get("", summary="获取文章列表")
 async def get_articles(
     offset: int = Query(0, ge=0),

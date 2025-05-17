@@ -3,7 +3,7 @@
     <a-card class="login-card" :bordered="false">
       <template #title>
         <div class="login-title">
-          <h2>微信公众号订阅助手</h2>
+          <h2>{{ appTitle }}</h2>
         </div>
       </template>
       
@@ -31,10 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from '@arco-design/web-vue'
 import { login } from '@/api/auth'
+
+const appTitle = computed(() => import.meta.env.VITE_APP_LOGIN_TITLE || '登录')
 
 const router = useRouter()
 const loading = ref(false)
@@ -80,7 +82,7 @@ const handleSubmit = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 80vh;
 }
 
 .login-card {

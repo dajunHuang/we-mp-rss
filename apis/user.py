@@ -6,7 +6,7 @@ from core.models import User as DBUser
 from core.auth import pwd_context
 import os
 
-router = APIRouter(prefix="/wx/user", tags=["用户管理"])
+router = APIRouter(prefix="/user", tags=["用户管理"])
 
 @router.get("", summary="获取用户信息")
 async def get_user_info(current_user: dict = Depends(get_current_user)):

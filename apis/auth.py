@@ -8,7 +8,7 @@ from core.auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from .ver import API_VERSION
-router = APIRouter(prefix=f"{API_VERSION}/auth", tags=["认证"])
+router = APIRouter(prefix=f"/auth", tags=["认证"])
 
 @router.post("/login", summary="用户登录")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
