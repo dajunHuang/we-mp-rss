@@ -83,6 +83,16 @@ API服务启动后，访问以下地址查看文档：
 - Swagger UI: http://localhost:8001/docs
 - Redoc: http://localhost:8001/redoc
 
+# 快速运行
+```
+docker run -d \
+  --name we-mp-rss \
+  -p 8001:8001 \
+  -e DB=sqlite:///db.db \
+  -e DINGDING_WEBHOOK=https://oapi.dingtalk.com/robot/send?access_token=xxx \
+  -v $(pwd)/data:/app/data \
+  ghcr.io/rachelos/we-mp-rss:latest
+```
 
 # Docker构建及运行
 ```
