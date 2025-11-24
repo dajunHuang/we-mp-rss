@@ -1,5 +1,5 @@
 # 支持多架构构建
-FROM --platform=$BUILDPLATFORM docker.1ms.run/ubuntu:20.04
+FROM --platform=$BUILDPLATFORM docker.1ms.run/ubuntu:latest
 
 # 声明构建参数
 ARG BUILDPLATFORM
@@ -11,7 +11,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 安装基础依赖
-RUN apt update && apt install -y wget build-essential zlib1g-dev libncurses5-dev \
+RUN apt update && apt install -y wget build-essential zlib1g-dev  \
     libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 

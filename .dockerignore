@@ -1,6 +1,7 @@
 data/
 web_ui/
 Dockerfile/
+node_modules/
 scripts/
 compose/
 fonts/

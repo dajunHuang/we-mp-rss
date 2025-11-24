@@ -82,8 +82,8 @@ article:
   true_delete: ${ARTICLE.TRUE_DELETE:-False}
 
 gather:
-  #是否采集内容  默认True
-  content: ${GATHER.CONTENT:-True}
+  #是否采集内容  默认False
+  content: ${GATHER.CONTENT:-False}
   #采集模式，web模式（可采集到发布链接)，api模式（可采集临时链接），app模式（采集最新消息）
   model: ${GATHER.MODEL:-app}
   #是否自动检查未采集文章内容，默认False
@@ -92,6 +92,10 @@ gather:
   content_auto_interval: ${GATHER.CONTENT_AUTO_INTERVAL:-59}
   #内容修正模式，默认web 允许值 web、api
   content_mode: ${GATHER.CONTENT_MODE:-web}
+  #是否清理html标签 默认True 
+  clean_html: ${GATHER.CLEAN_HTML:-True}
+  #浏览器类型 默认firefox 允许值 firefox/edge/webkit
+  browser_type: ${BROWSER_TYPE:-firefox}
 #安全配置
 safe:
     # 需要隐藏的配置信息，用逗号分隔 如：db,secret,token等 

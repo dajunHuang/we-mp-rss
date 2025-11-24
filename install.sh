@@ -1,0 +1,87 @@
+#!/bin/bash
+
+
+plantform="$(uname -m)"
+plant=/app/data/venv_$plantform
+python3 -m venv $plant
+source $plant/bin/activate
+echo "使用虚拟环境: $plant"
+
+
+# 检查函数：检查包是否已安装
+check_package() {
+    if command -v "$1" >/dev/null 2>&1; then
+        echo "$1 已安装"
+        return 0
+    elif dpkg -l "$1" 2>/dev/null | grep -q "^ii"; then
+        echo "$1 已安装"
+        return 0
+    else
+        echo "$1 未安装"
+        return 1
+    fi
+}
+# 检查所有需要的包
+packages=("wget" "git" "build-essential" "zlib1g-dev" 
+          "libgdbm-dev" "libnss3-dev" "libssl-dev" "libreadline-dev" 
+          "libffi-dev" "libsqlite3-dev" "procps" )
+
+
+
+if [ "$EXPORT_PDF" = "True" ]; then
+    echo "添加libreoffice依赖包..."
+    packages+=("fonts-noto-cjk" "libreoffice")
+fi
+
+echo "检查依赖包安装状态..."
+for package in "${packages[@]}"; do
+    if ! check_package "$package"; then
+        missing_packages+=("$package")
+    fi
+done
+echo "${missing_packages[*]}"
+if [ ${#missing_packages[@]} -eq 0 ]; then
+    echo "所有依赖都已安装，无需重复安装。"
+else
+    echo "需要安装的包: ${missing_packages[*]}"
+    echo "开始安装..."
+    apt update && apt install -y ${missing_packages[*]} --no-install-recommends\
+        && rm -rf /var/lib/apt/lists/*
+    if [ $? -eq 0 ]; then
+        echo "安装完成！"
+    else
+        echo "安装失败！"
+        exit 1
+    fi
+fi
+
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-/app/data/driver/_$plantform}
+BROWSER_TYPE=${BROWSER_TYPE:-webkit}
+echo "PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH}
+TZ=Asia/Shanghai
+BROWSER_TYPE=${BROWSER_TYPE}">/etc/environment
+echo "环境变量已设置"
+
+cat /etc/environment
+source /etc/environment
+
+# pip3 install --upgrade pip
+
+# 检查requirements.txt更新
+if [ -f "requirements.txt" ]; then
+    CURRENT_MD5=$(md5sum requirements.txt | cut -d' ' -f1)
+    OLD_MD5_FILE="/app/data/requirements.txt.md5"
+    
+    if [ -f "$OLD_MD5_FILE" ] && [ "$CURRENT_MD5" = "$(cat $OLD_MD5_FILE)" ]; then
+        echo "requirements.txt未更新，跳过安装"
+    else
+        echo "安装requirements.txt依赖..."
+        pip3 install -r requirements.txt
+        echo $CURRENT_MD5 > $OLD_MD5_FILE
+    fi
+fi 
+if [ "$WERSS_AUTH_WEB" = "True" ]; then
+    playwright install $BROWSER_TYPE --with-deps
+fi

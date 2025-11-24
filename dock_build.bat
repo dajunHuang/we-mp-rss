@@ -28,7 +28,7 @@ if errorlevel 1 (
 
 echo 开始构建多架构镜像 (%platform%)... %name%
 REM 先构建并加载本地架构的镜像
-docker buildx build --platform %platform% -t %name% --load .
+docker buildx build --platform %platform% -t %name%  --load . --progress plain --no-cache
 echo 构建完成: %name%
 echo 检查镜像架构信息:
 docker inspect %name%|find "arm64"
