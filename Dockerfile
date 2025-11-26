@@ -1,6 +1,5 @@
 
 FROM  ghcr.io/rachelos/base-mini:latest as werss-base
-# FROM  --platform=$BUILDPLATFORM docker.1ms.run/python:3.13.1-slim AS werss-base
 #
 
 ENV PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
