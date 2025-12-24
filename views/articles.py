@@ -24,6 +24,7 @@ def _render_template_with_error(template_path: str, error_msg: str, breadcrumb: 
         
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "error": error_msg,
             "breadcrumb": breadcrumb
         })
@@ -200,6 +201,7 @@ async def articles_view(
         
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "articles": article_list,
             "current_page": page,
             "total_pages": total_pages,
@@ -268,6 +270,19 @@ async def article_detail_view(
             Article.status == 1
         ).order_by(Article.publish_time.desc()).limit(5).all()
         
+        # 获取上一个和下一个文章ID
+        prev_article = session.query(Article.id).filter(
+            Article.mp_id == article.mp_id,
+            Article.publish_time < article.publish_time,
+            Article.status == 1
+        ).order_by(Article.publish_time.desc()).first()
+        
+        next_article = session.query(Article.id).filter(
+            Article.mp_id == article.mp_id,
+            Article.publish_time > article.publish_time,
+            Article.status == 1
+        ).order_by(Article.publish_time.asc()).first()
+        
         related_list = []
         for rel_article in related_articles:
             rel_data = {
@@ -292,13 +307,12 @@ async def article_detail_view(
             "mp_name": feed.mp_name if feed else "未知公众号",
             "mp_id": article.mp_id,
             "mp_cover": Web.get_image_url(feed.mp_cover) if feed else "",
-            "mp_intro": feed.mp_intro if feed else ""
+            "mp_intro": feed.mp_intro if feed else "",
         }
         
         # 构建面包屑
         breadcrumb = [
-            {"name": "首页", "url": "/views/home"},
-            {"name": "文章列表", "url": "/views/articles"},
+            {"name": feed.mp_name, "url": f"/views/articles?mp_id={article_data['mp_id']}"},
             {"name": article_data["title"][:50] + "..." if len(article_data["title"]) > 50 else article_data["title"], "url": None}
         ]
         
@@ -309,9 +323,12 @@ async def article_detail_view(
         
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "article": article_data,
             "related_articles": related_list,
-            "breadcrumb": breadcrumb
+            "prev_article_id": prev_article[0] if prev_article else None,
+            "next_article_id": next_article[0] if next_article else None,
+            "breadcrumb": breadcrumb,
         })
         
         return HTMLResponse(content=html_content)

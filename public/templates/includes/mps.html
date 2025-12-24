@@ -1,16 +1,5 @@
-{%include "includes/header.html" %}
-<div class="grid grid-6">
-    {% for tag in tags['tags'] %}
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="text-align: center;width:100%;"><a href="/views/tag/{{tag.id}}">{{tag.name}}</a></h3>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
 <div class="grid grid-3">
-    {% for feed in mps['feeds'] %}
+    {% for feed in feeds %}
     <div class="card">
         <div style="text-align: center; margin-bottom: 1rem;">
             {% if feed.cover %}
@@ -22,9 +11,11 @@
             <h3 style="text-align: center;width:100%;"><a href="/views/articles?mp_id={{feed.id}}">{{feed.name}}</a></h3>
         </div>
         <div style="margin: 1rem 0;">
+            <span style="font-size: 0.8rem;text-align: center;display: block;">
+                📄 {{feed.article_count}} 篇文章
+            </span>
         </div>
     <p class="text-muted">{% if feed.intro %}{% if len(feed.intro) > 50 %}{{feed.intro.slice(0, 50)}}...{% else %}{{feed.intro}}{% endif %}{% else %}暂无简介{% endif %}</p>
     </div>
     {% endfor %}
 </div>
-{% include "includes/footer.html" %}

@@ -1,12 +1,10 @@
   {% if len(breadcrumb)>0 %}
-            <div class="breadcrumb" style="margin-bottom: 1.5rem;">
-                <a href="/views/home" class="breadcrumb-item" style="color: #6c757d; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;">
-                               首页
+            <div class="breadcrumb" style="margin-bottom: 1rem;font-size:1rem;font-weight: bold;">
+                <a href="/views/home" class="breadcrumb-item" style="color: #000; text-decoration: none;transition: color 0.3s;">
+                               首页/
                 </a>
                     {% for item in breadcrumb %}
-                        {% if loop.last %}
-                            <span  style="color: #adb5bd; font-size: 0.8rem;">/{{ item.name }}</span>
-                        {% endif %}
+                            <span  style="color: #363434;text-decoration: none;transition: color 0.3s; " >{{ item.name }}</span>
                     {% endfor %}
             </div>
 {% endif %}

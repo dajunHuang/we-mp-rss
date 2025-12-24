@@ -21,7 +21,7 @@ router = APIRouter(tags=["标签"])
 async def tags_view(
     request: Request,
     page: int = Query(1, ge=1, description="页码"),
-    limit: int = Query(12, ge=1, le=50, description="每页数量")
+    limit: int = Query(8, ge=1, le=20, description="每页数量")
 ):
     """
     首页显示所有标签，支持分页
@@ -90,6 +90,7 @@ async def tags_view(
         # 使用模板引擎渲染
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "tags": tag_list,
             "current_page": page,
             "total_pages": total_pages,
@@ -111,6 +112,7 @@ async def tags_view(
         
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "error": f"加载数据时出现错误: {str(e)}",
             "breadcrumb": [{"name": "标签", "url": "/views/tags"}]
         })
@@ -217,6 +219,7 @@ async def tag_detail_view(
         
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "tag": tag_data,
             "articles": articles,
             "current_page": page,
@@ -241,6 +244,7 @@ async def tag_detail_view(
         
         parser = TemplateParser(template_content, template_dir=base.public_dir)
         html_content = parser.render({
+            "site": base.site,
             "error": f"加载数据时出现错误: {str(e)}",
             "breadcrumb": [{"name": "首页", "url": "/views/home"}]
         })
