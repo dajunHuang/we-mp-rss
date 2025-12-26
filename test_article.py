@@ -154,19 +154,26 @@ def test_send_wx_code():
 def testJob():
     from jobs import start_job
     start_job()
-def test_Gather_Mps(mp_id="MP_WXS_2398045337"):
-    from core.wx.base import WxGather
-    from jobs.article import UpdateArticle,Update_Over
-    wx=WxGather().Model()
-    try:
-        mp=DB.get_mps(mp_id)
-        db=DB.get_session()
-        db.query(Article).filter(Article.mp_id==mp_id).delete()
-        db.commit()
-        wx.get_Articles(str(mp.faker_id),CallBack=UpdateArticle,Mps_id=mp.id,Mps_title=mp.mp_name, MaxPage=1,Over_CallBack=Update_Over)
-    except Exception as e:
-        print_error(e)
-
+def test_feed_and_articles_template():
+        from core.lax import TemplateParser
+        """Test feed and articles template."""
+        template = """{% if feed is defined %}{
+ "feed": "{{ feed.mp_name.replace("\\n","") }}",
+ "articles": [
+{% for article in articles %}{"title": "{{ article.title }}", "pub_date": "{{ article.publish_time }}"}{% if not loop.last %},{% endif %}
+{% endfor %}
+ ]
+}"""
+        parser = TemplateParser(template)
+        context = {
+            "feed": {"mp_name": "Test \nFeed"},
+            "articles": [
+                {"title": "Article 1", "publish_time": "2025-10-24"},
+                {"title": "Article 2", "publish_time": "2025-10-25"}
+            ]
+        }
+        result = parser.render(context)
+        print(result)
 if __name__=="__main__":
     # import asyncio
     # test_screenshot()
@@ -179,7 +186,7 @@ if __name__=="__main__":
     # testNotice()
     # testMd2Doc()
     # testLogin()
-    test_Gather_Mps()
+    test_feed_and_articles_template()
     # testJob()
     # test_send_wx_code()
     # testCheckAuth()
